@@ -215,4 +215,90 @@ footer {
     font-size: 0.9rem;
     background: linear-gradient(180deg, transparent, rgba(201, 162, 39, 0.08));
 }
- 
+/* ===== Responsive: Navbar Mobile ===== */
+.nav-toggle {
+    display: none;
+}
+
+.nav-toggle-label {
+    display: none;
+    font-size: 1.8rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .nav-toggle-label {
+        display: block;
+    }
+
+    header nav {
+        width: 100%;
+        display: none;
+        order: 3;
+    }
+
+    .nav-toggle:checked ~ nav {
+        display: block;
+    }
+
+    header nav ul {
+        flex-direction: column;
+        gap: 0;
+        margin-top: 0.75rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    header nav ul li a {
+        display: block;
+        padding: 0.75rem 0.25rem;
+    }
+}
+
+/* ===== Responsive: Tabel jadi kartu di layar kecil ===== */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+@media (max-width: 600px) {
+    table thead {
+        display: none;
+    }
+
+    table, table tbody, table tr, table td {
+        display: block;
+        width: 100%;
+    }
+
+    table tr {
+        margin-bottom: 1rem;
+        border: 1px solid #e6ddc8;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 1px 6px rgba(22, 35, 58, 0.08);
+    }
+
+    table td {
+        text-align: right;
+        border-bottom: 1px solid #e6ddc8;
+    }
+
+    table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: 600;
+        color: var(--midnight);
+    }
+
+    table td:last-child {
+        border-bottom: none;
+    }
+}
+
+/* ===== Responsive: Kartu Statistik jadi 1 kolom di HP ===== */
+@media (max-width: 500px) {
+    main section:nth-of-type(2) {
+        grid-template-columns: 1fr;
+    }
+}
