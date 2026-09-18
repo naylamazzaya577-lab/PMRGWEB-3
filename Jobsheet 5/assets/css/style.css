@@ -2,7 +2,7 @@
 :root {
     --bs-primary: #16233A;      /* midnight */
     --bs-primary-rgb: 22, 35, 58;
-    --bs-body-bg: #FAF7F2;      /* ivory */
+    --bs-body-bg: #fdfcf3;      /* ivory */
     --bs-link-color: #C9A227;   /* champagne-gold */
 }
 
@@ -16,4 +16,10 @@ body {
 
 .card {
     border-top: 3px solid #C9A227;
+}
+
+/* ===== TAMBAHAN UNTUK JOBSHEET 5 ===== */
+/* Menampilkan menu navbar saat tombol hamburger di-click (toggle class .nav-open via JS) */
+.navbar.nav-open .navbar-collapse {
+    display: block !important;
 }
