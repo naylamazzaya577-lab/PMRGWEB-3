@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SugarySweets | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkgreen: '#103713',
+                        softgreen: '#1b5220',
+                        lightbg: '#F8FAFC',
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        code, th { font-family: 'JetBrains Mono', monospace; }
+    </style>
+</head>
+<body class="bg-lightbg text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-darkgreen selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="border-b border-slate-200 bg-white/90 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-6">
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <div class="w-8 h-8 rounded-full bg-darkgreen text-white flex items-center justify-center font-bold text-sm tracking-tighter shadow-sm">
+                        SS
+                    </div>
+                    <span class="font-bold text-lg tracking-tight text-slate-900 group-hover:text-darkgreen transition-colors">SugarySweets</span>
+                </a>
+                <span class="text-slate-300">/</span>
+                <span class="text-xs font-mono px-2 py-1 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium">production</span>
+            </div>
+
+            <nav class="hidden md:flex items-center space-x-1 text-sm font-medium">
+                <a href="index.html" class="px-3 py-1.5 rounded-lg text-white bg-darkgreen font-semibold shadow-sm">Beranda</a>
+                <a href="produk/ListProduk.html" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-darkgreen hover:bg-slate-100 transition-colors">Produk</a>
+                <a href="pelanggan/ListPelanggan.html" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-darkgreen hover:bg-slate-100 transition-colors">Pelanggan</a>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <a href="https://github.com" target="_blank" class="p-2 text-slate-500 hover:text-darkgreen rounded-lg hover:bg-slate-100 transition-colors">
+                    <i data-lucide="github" class="w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <!-- Hero Section -->
+        <div class="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-8 sm:p-12 mb-8 shadow-sm">
+            <div class="absolute -right-16 -top-16 w-72 h-72 bg-emerald-50 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="relative z-10 max-w-2xl">
+                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/60 text-emerald-900 text-xs font-mono mb-4">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>System Active</span>
+                </div>
+                <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 mb-4">
+                    SugarySweets Dashboard
+                </h1>
+                <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-6">
+                    Sistem manajemen toko roti & kue, Selamat Berbelanja
+                </p>
+                <div class="flex flex-wrap gap-3">
+                    <a href="produk/ListProduk.html" class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-lg bg-darkgreen text-white font-semibold text-sm hover:bg-softgreen transition-colors shadow-sm">
+                        <i data-lucide="package" class="w-4 h-4"></i>
+                        <span>Kelola Produk</span>
+                    </a>
+                    <a href="pelanggan/ListPelanggan.html" class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-lg bg-white text-slate-700 font-medium text-sm border border-slate-200 hover:border-darkgreen hover:text-darkgreen transition-colors shadow-sm">
+                        <i data-lucide="users" class="w-4 h-4"></i>
+                        <span>Data Pelanggan</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metrics Grid (Diubah jadi 2 Kolom, Status Server Dihapus) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
+            <div class="p-6 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-emerald-200 transition-colors">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-mono uppercase tracking-wider text-slate-500">Total Produk</span>
+                    <div class="p-2 rounded-lg bg-emerald-50 text-darkgreen">
+                        <i data-lucide="box" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <div class="text-4xl font-extrabold text-slate-900 tracking-tight">45</div>
+                <p class="text-xs text-slate-500 mt-2">Varian roti & kue </p>
+            </div>
+
+            <div class="p-6 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-emerald-200 transition-colors">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-mono uppercase tracking-wider text-slate-500">Total Pelanggan</span>
+                    <div class="p-2 rounded-lg bg-emerald-50 text-darkgreen">
+                        <i data-lucide="users" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <div class="text-4xl font-extrabold text-slate-900 tracking-tight">5</div>
+                <p class="text-xs text-slate-500 mt-2">Pelanggan terdaftar</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-slate-200 bg-white py-8 mt-auto text-center text-xs text-slate-500">
+        &copy; 2026 SugarySweets &mdash; by -nay
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SugarySweets | Tambah Produk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkgreen: '#103713',
+                        softgreen: '#1b5220',
+                        lightbg: '#F8FAFC',
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        code, th { font-family: 'JetBrains Mono', monospace; }
+    </style>
+</head>
+<body class="bg-lightbg text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-darkgreen selection:text-white">
+
+    <header class="border-b border-slate-200 bg-white/90 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-6">
+                <a href="../index.html" class="flex items-center space-x-3 group">
+                    <div class="w-8 h-8 rounded-full bg-darkgreen text-white flex items-center justify-center font-bold text-sm tracking-tighter shadow-sm">
+                        SS
+                    </div>
+                    <span class="font-bold text-lg tracking-tight text-slate-900 group-hover:text-darkgreen transition-colors">SugarySweets</span>
+                </a>
+                <span class="text-slate-300">/</span>
+                <span class="text-xs font-mono px-2 py-1 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium">tambah-produk</span>
+            </div>
+
+            <nav class="hidden md:flex items-center space-x-1 text-sm font-medium">
+                <a href="../index.html" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-darkgreen hover:bg-slate-100 transition-colors">Beranda</a>
+                <a href="ListProduk.html" class="px-3 py-1.5 rounded-lg text-white bg-darkgreen font-semibold shadow-sm">Produk</a>
+                <a href="../pelanggan/ListPelanggan.html" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-darkgreen hover:bg-slate-100 transition-colors">Pelanggan</a>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <a href="https://github.com" target="_blank" class="p-2 text-slate-500 hover:text-darkgreen rounded-lg hover:bg-slate-100 transition-colors">
+                    <i data-lucide="github" class="w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-2xl w-full mx-auto px-4 sm:px-6 py-10">
+        <div class="mb-8">
+            <a href="ListProduk.html" class="inline-flex items-center space-x-2 text-xs font-mono text-slate-500 hover:text-darkgreen mb-3 transition-colors">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                <span>Kembali ke Daftar Produk</span>
+            </a>
+            <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Tambah Produk Baru</h1>
+            <p class="text-slate-500 text-sm mt-1">Masukkan data produk baru yang akan didaftarkan ke inventaris.</p>
+        </div>
+
+        <div class="rounded-xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
+            <form id="formTambahProduk" class="space-y-5">
+                <div>
+                    <label for="kode" class="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-2">Kode Produk</label>
+                    <input type="text" id="kode" name="kode" required placeholder="Contoh: P003" class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-darkgreen focus:ring-1 focus:ring-darkgreen text-sm transition-all">
+                </div>
+
+                <div>
+                    <label for="nama" class="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-2">Nama Produk</label>
+                    <input type="text" id="nama" name="nama" required placeholder="Contoh: Brownies Fudgy Cokelat" class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-darkgreen focus:ring-1 focus:ring-darkgreen text-sm transition-all">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="kategori" class="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-2">Kategori</label>
+                        <select id="kategori" name="kategori" required class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-darkgreen focus:ring-1 focus:ring-darkgreen text-sm transition-all">
+                            <option value="Roti">Roti</option>
+                            <option value="Kue">Kue</option>
+                            <option value="Pastry">Pastry</option>
+                            <option value="Minuman">Minuman</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="harga" class="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-2">Harga (Rp)</label>
+                        <input type="number" id="harga" name="harga" required placeholder="25000" class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-darkgreen focus:ring-1 focus:ring-darkgreen text-sm transition-all">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="stok" class="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-2">Jumlah Stok</label>
+                    <input type="number" id="stok" name="stok" required placeholder="15" class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-darkgreen focus:ring-1 focus:ring-darkgreen text-sm transition-all">
+                </div>
+
+                <div class="pt-4 flex items-center justify-end space-x-3">
+                    <a href="ListProduk.html" class="px-4 py-2.5 rounded-lg bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200 text-sm font-medium transition-colors">Batal</a>
+                    <button type="submit" class="inline-flex items-center space-x-2 px-5 py-2.5 rounded-lg bg-darkgreen text-white font-semibold text-sm hover:bg-softgreen transition-colors shadow-sm">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                        <span>Simpan Produk</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="border-t border-slate-200 bg-white py-8 mt-auto text-center text-xs text-slate-500">
+        &copy; 2026 SugarySweets &mdash; Elegant Green & White Theme
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
