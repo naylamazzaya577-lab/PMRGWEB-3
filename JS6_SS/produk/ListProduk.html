@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SugarySweets | Daftar Produk</title>
+    <title>Taslimiyah Bakery | Daftar Produk</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -27,38 +27,53 @@
 </head>
 <body class="bg-lightbg text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-darkgreen selection:text-white">
 
-    <header class="border-b border-slate-200 bg-white/90 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-6">
-                <a href="../index.html" class="flex items-center space-x-3 group">
-                    <div class="w-8 h-8 rounded-full bg-darkgreen text-white flex items-center justify-center font-bold text-sm tracking-tighter shadow-sm">
-                        SS
-                    </div>
-                    <span class="font-bold text-lg tracking-tight text-slate-900 group-hover:text-darkgreen transition-colors">SugarySweets</span>
-                </a>
-                <span class="text-slate-300">/</span>
-                <span class="text-xs font-mono px-2 py-1 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium">produk</span>
-            </div>
-
-            <nav class="hidden md:flex items-center space-x-1 text-sm font-medium">
-                <a href="../index.html" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-darkgreen hover:bg-slate-100 transition-colors">Beranda</a>
-                <a href="ListProduk.html" class="px-3 py-1.5 rounded-lg text-white bg-darkgreen font-semibold shadow-sm">Produk</a>
-                <a href="../pelanggan/ListPelanggan.html" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-darkgreen hover:bg-slate-100 transition-colors">Pelanggan</a>
-            </nav>
-
-            <div class="flex items-center space-x-3">
-                <a href="https://github.com" target="_blank" class="p-2 text-slate-500 hover:text-darkgreen rounded-lg hover:bg-slate-100 transition-colors">
-                    <i data-lucide="github" class="w-5 h-5"></i>
-                </a>
-            </div>
+ <!-- Header Navigation-->
+<header class="border-b border-slate-200 bg-white/90 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center space-x-3 sm:space-x-6">
+            <a href="../index.html" class="flex items-center space-x-3 group">
+                <div class="w-8 h-8 rounded-full bg-darkgreen text-white flex items-center justify-center font-bold text-sm tracking-tighter shadow-sm">
+                    T
+                </div>
+                <span class="font-bold text-lg tracking-tight text-slate-900 group-hover:text-darkgreen transition-colors">Taslimiyah Bakery</span>
+            </a>
+            <span class="text-slate-300">/</span>
+            <span class="text-xs font-mono px-2 py-1 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium"> Bakers </span>
         </div>
-    </header>
+
+        <nav class="hidden md:flex items-center space-x-1 text-sm font-medium">
+            <a href="../index.html" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-darkgreen hover:bg-slate-100 transition-colors">Beranda</a>
+            <a href="../produk/ListProduk.html" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-darkgreen hover:bg-slate-100 transition-colors">Produk</a>
+            <a href="../pelanggan/ListPelanggan.html" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-darkgreen hover:bg-slate-100 transition-colors">Pelanggan</a>
+        </nav>
+
+        <div class="flex items-center space-x-2">
+            <a href="https://github.com" target="_blank" class="p-2 text-slate-500 hover:text-darkgreen rounded-lg hover:bg-slate-100 transition-colors">
+                <i data-lucide="github" class="w-5 h-5"></i>
+            </a>
+            
+            <button id="menu-btn" class="md:hidden p-2 text-slate-600 hover:text-darkgreen hover:bg-slate-100 rounded-lg transition-colors focus:outline-none">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </div>
+
+<!-- Menu Dropdown Mobile  -->
+<div id="mobile-menu" class="hidden md:hidden absolute right-4 top-16 w-48 bg-white border border-slate-200 rounded-xl p-2 shadow-xl z-50 flex flex-col space-y-1">
+    <a href="../index.html" class="block px-4 py-2.5 rounded-lg text-slate-700 hover:text-white hover:bg-darkgreen text-sm font-medium transition-colors">
+        Beranda </a>
+    <a href="ListProduk.html" class="block px-4 py-2.5 rounded-lg text-white bg-darkgreen text-sm font-medium transition-colors">
+        Produk</a>
+    <a href="../pelanggan/ListPelanggan.html" class="block px-4 py-2.5 rounded-lg text-slate-700 hover:text-white hover:bg-darkgreen text-sm font-medium transition-colors">
+        Pelanggan</a>
+</div>
+</header>
 
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
                 <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Daftar Produk</h1>
-                <p class="text-slate-500 text-sm mt-1">Kelola stok dan daftar varian produk kue dan roti.</p>
+                <p class="text-slate-500 text-sm mt-1">Kelola stok dan daftar produk Cake dan roti.</p>
             </div>
             <a href="TambahProduk.html" class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-lg bg-darkgreen text-white font-semibold text-sm hover:bg-softgreen transition-colors w-fit shadow-sm">
                 <i data-lucide="plus" class="w-4 h-4"></i>
@@ -80,18 +95,39 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         <tr class="hover:bg-slate-50/80 transition-colors">
-                            <td class="px-6 py-4 font-mono text-darkgreen font-bold">P001</td>
-                            <td class="px-6 py-4 font-semibold text-slate-900">Roti Manis Keju</td>
+                            <td class="px-6 py-4 font-mono text-darkgreen font-bold">R020</td>
+                            <td class="px-6 py-4 font-semibold text-slate-900">Roti Manis| Roti Sobek Coklat Keju</td>
                             <td class="px-6 py-4 text-slate-600">Roti</td>
-                            <td class="px-6 py-4 font-mono text-slate-600">Rp 12.000</td>
-                            <td class="px-6 py-4 text-slate-600">20</td>
+                            <td class="px-6 py-4 font-mono text-slate-600">Rp 13.000</td>
+                            <td class="px-6 py-4 text-slate-600">47</td>
                         </tr>
                         <tr class="hover:bg-slate-50/80 transition-colors">
-                            <td class="px-6 py-4 font-mono text-darkgreen font-bold">P002</td>
-                            <td class="px-6 py-4 font-semibold text-slate-900">Croissant Cokelat</td>
-                            <td class="px-6 py-4 text-slate-600">Pastry</td>
-                            <td class="px-6 py-4 font-mono text-slate-600">Rp 18.000</td>
+                            <td class="px-6 py-4 font-mono text-darkgreen font-bold">R024</td>
+                            <td class="px-6 py-4 font-semibold text-slate-900">Roti Manis| Roti Pandan Srikaya</td>
+                            <td class="px-6 py-4 text-slate-600">Roti</td>
+                            <td class="px-6 py-4 font-mono text-slate-600">Rp 12.500</td>
+                            <td class="px-6 py-4 text-slate-600">50</td>
+                        </tr>
+                         <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="px-6 py-4 font-mono text-darkgreen font-bold">KK08</td>
+                            <td class="px-6 py-4 font-semibold text-slate-900">Kue Kering| Kue Kering Nastar Ori</td>
+                            <td class="px-6 py-4 text-slate-600">Kue Kering</td>
+                            <td class="px-6 py-4 font-mono text-slate-600">Rp 55.000</td>
+                            <td class="px-6 py-4 text-slate-600">47</td>
+                        </tr>
+                         <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="px-6 py-4 font-mono text-darkgreen font-bold">C005</td>
+                            <td class="px-6 py-4 font-semibold text-slate-900">Cake| Banana Cake</td>
+                            <td class="px-6 py-4 text-slate-600">Cake</td>
+                            <td class="px-6 py-4 font-mono text-slate-600">Rp 16.000</td>
                             <td class="px-6 py-4 text-slate-600">15</td>
+                        </tr>
+                         <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="px-6 py-4 font-mono text-darkgreen font-bold">KK12</td>
+                            <td class="px-6 py-4 font-semibold text-slate-900">Kue Kering| Kue Kering Lidah Kucing</td>
+                            <td class="px-6 py-4 text-slate-600">Kue Kering</td>
+                            <td class="px-6 py-4 font-mono text-slate-600">Rp 42.000</td>
+                            <td class="px-6 py-4 text-slate-600">20</td>
                         </tr>
                     </tbody>
                 </table>
@@ -100,11 +136,21 @@
     </main>
 
     <footer class="border-t border-slate-200 bg-white py-8 mt-auto text-center text-xs text-slate-500">
-        &copy; 2026 SugarySweets &mdash; Elegant Green & White Theme
+        &copy; 2026 Taslimiyah Bakery &mdash; by -nay
     </footer>
 
     <script>
-        lucide.createIcons();
-    </script>
+    lucide.createIcons();
+
+    // Toggle Hamburger Menu
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+</script>
 </body>
 </html>

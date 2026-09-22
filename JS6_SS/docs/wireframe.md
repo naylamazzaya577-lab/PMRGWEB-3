@@ -1,6 +1,7 @@
 # Wireframe & Documentation — SugarySweets (Vercel Style)
 
-Dokumentasi rancangan antarmuka SugarySweets dengan tema Vercel Dark Mode UI.
+Dokumentasi rancangan antarmuka Taslimiyah Bakery 
+ dengan tema yang menggunakan Tail wind Dark Mode UI.
 
 ##
 - Navbar sticky dengan Glassmorphism effect.
