@@ -1,0 +1,7 @@
+[
+  { "kode_pelanggan": "C001", "nama": "Dewi Lestari", "alamat": "Bululawang, Malang", "no_hp": "081234567890" },
+  { "kode_pelanggan": "C002", "nama": "Ahmad Fauzi", "alamat": "Krebet Senggrong, Malang", "no_hp": "081398765432" },
+  { "kode_pelanggan": "C003", "nama": "Rina Puspita", "alamat": "Kepanjen, Malang", "no_hp": "085711223344" },
+  { "kode_pelanggan": "C004", "nama": "Bagus Prakoso", "alamat": "Gondanglegi, Malang", "no_hp": "082155667788" },
+  { "kode_pelanggan": "C005", "nama": "Siti Nur Aini", "alamat": "Pakisaji, Malang", "no_hp": "088899001122" }
+]

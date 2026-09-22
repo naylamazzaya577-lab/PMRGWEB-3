@@ -1,0 +1,8 @@
+[
+  { "kode_produk": "P001", "nama_produk": "Roti Tawar Premium", "kategori": "Roti", "harga": 18000, "stok": 25 },
+  { "kode_produk": "P002", "nama_produk": "Roti Sobek Coklat Keju", "kategori": "Roti", "harga": 22000, "stok": 18 },
+  { "kode_produk": "P003", "nama_produk": "Black Forest Cake", "kategori": "Cake", "harga": 135000, "stok": 6 },
+  { "kode_produk": "P004", "nama_produk": "Red Velvet Cake", "kategori": "Cake", "harga": 145000, "stok": 4 },
+  { "kode_produk": "P005", "nama_produk": "Brownies Panggang Fudgy", "kategori": "Pastry", "harga": 45000, "stok": 12 },
+  { "kode_produk": "P006", "nama_produk": "Croissant Butter", "kategori": "Pastry", "harga": 15000, "stok": 30 }
+]
