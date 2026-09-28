@@ -1,4 +1,4 @@
-ni<?php
+<?php
 // includes/header.php
 // Dipakai lewat include di setiap halaman .php
 // $base tetap digunakan untuk file CSS agar tampilan tetap berjalan.
