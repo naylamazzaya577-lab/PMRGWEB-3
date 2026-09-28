@@ -18,20 +18,3 @@ CREATE TABLE IF NOT EXISTS pelanggan (
     no_hp           VARCHAR(20)   NOT NULL
 );
 
--- Data awal (opsional, menggantikan seed session dari Jobsheet 7)
-INSERT INTO produk (kode_produk, nama_produk, kategori, harga, stok) VALUES
-    ('P001', 'Roti Tawar Premium', 'Roti', 18000, 25),
-    ('P002', 'Roti Sobek Coklat Keju', 'Roti', 22000, 18),
-    ('P003', 'Black Forest Cake', 'Cake', 135000, 6),
-    ('P004', 'Red Velvet Cake', 'Cake', 145000, 4),
-    ('P005', 'Brownies Panggang Fudgy', 'Pastry', 45000, 12),
-    ('P006', 'Croissant Butter', 'Pastry', 15000, 30)
-ON CONFLICT (kode_produk) DO NOTHING;
-
-INSERT INTO pelanggan (kode_pelanggan, nama, alamat, no_hp) VALUES
-    ('C001', 'Dewi Lestari', 'Bululawang, Malang', '081234567890'),
-    ('C002', 'Ahmad Fauzi', 'Krebet Senggrong, Malang', '081398765432'),
-    ('C003', 'Rina Puspita', 'Kepanjen, Malang', '085711223344'),
-    ('C004', 'Bagus Prakoso', 'Gondanglegi, Malang', '082155667788'),
-    ('C005', 'Siti Nur Aini', 'Pakisaji, Malang', '088899001122')
-ON CONFLICT (kode_pelanggan) DO NOTHING;
