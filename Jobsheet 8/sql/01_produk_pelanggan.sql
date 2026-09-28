@@ -1,5 +1,4 @@
 -- sql/01_produk_pelanggan.sql
--- Skema dasar (ERD sederhana) untuk Taslimiyah Bakery
 -- Dijalankan dengan: psql -d taslimiyah_bakery -f sql/01_produk_pelanggan.sql
 
 CREATE TABLE IF NOT EXISTS produk (

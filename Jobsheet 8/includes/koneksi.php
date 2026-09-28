@@ -3,11 +3,11 @@
 // Koneksi PDO ke PostgreSQL. Di-include lewat require di setiap file
 // yang butuh akses database (list.php, proses_tambah.php, index.php).
 
-$host = '127.0.0.1';
+$host = ep-billowing-tree-b4dw64eu-pooler.c-6.us-east-2.aws.neon.tech
 $port = '5432';
-$db   = 'taslimiyah_bakery';
-$user = 'postgres';   // sesuaikan dengan environment lokal kamu
-$pass = '';            // sesuaikan dengan environment lokal kamu
+$db   = neondb;
+$user = neondb_owner; // sesuaikan dengan environment lokal kamu
+$pass = npg_h9VzA4PGYKtD;            // sesuaikan dengan environment lokal kamu
 
 $dsn = "pgsql:host={$host};port={$port};dbname={$db}";
 
