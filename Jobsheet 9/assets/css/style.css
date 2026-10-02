@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8faf9;
+}
+
+code, th {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Custom Color Class Helper untuk Bakery Theme */
+.bg-darkgreen {
+    background-color: #1b4332;
+}
+.text-darkgreen {
+    color: #1b4332;
+}
+.border-darkgreen {
+    border-color: #2d6a4f;
+}
+.hover\:bg-softgreen:hover {
+    background-color: #2d6a4f;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+    background: #2d6a4f;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #1b4332;
+}
