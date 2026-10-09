@@ -1,11 +1,17 @@
 <?php
-$host = 'ep-billowing-tree-b4dw64eu.c-6.us-east-2.aws.neon.tech';
-$port = '5432';
-$db   = 'neondb';
-$user = 'neondb_owner';
-$pass = 'npg_h9VzA4PGYKtD';
+// Di Railway: diisi lewat Variables. Di lokal: lewat koneksi.local.php (tidak di-push).
+$local = __DIR__ . '/koneksi.local.php';
+if (is_file($local)) {
+    require $local;
+}
 
-$dsn = "pgsql:host={$host};port={$port};dbname={$db}";
+$host = $host ?? getenv('DB_HOST');
+$port = $port ?? (getenv('DB_PORT') ?: '5432');
+$db   = $db   ?? getenv('DB_NAME');
+$user = $user ?? getenv('DB_USER');
+$pass = $pass ?? getenv('DB_PASS');
+
+$dsn = "pgsql:host={$host};port={$port};dbname={$db};sslmode=require";
 
 try {
     $pdo = new PDO($dsn, $user, $pass, [
