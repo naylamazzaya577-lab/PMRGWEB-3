@@ -10,7 +10,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if (empty($_SESSION['user_id'])) {
+if (empty($_SESSION['user_id']) || !in_array($_SESSION['role'] ?? '', ['admin', 'petugas'], true)) {
     // Hitung $base otomatis berdasarkan kedalaman folder, sama seperti
     // logika di includes/header.php, supaya redirect tetap benar baik
     // diakses dari root (php -S) maupun subfolder (Laragon).

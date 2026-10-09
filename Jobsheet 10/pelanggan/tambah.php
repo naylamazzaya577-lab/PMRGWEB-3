@@ -10,7 +10,7 @@ include __DIR__ . '/../includes/header.php';
             <span>Kembali ke Daftar Pelanggan</span>
         </a>
         <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Tambah Pelanggan Baru</h1>
-        <p class="text-slate-500 text-sm mt-1">Segera daftarkan dirimu. Be A Mamber and get 9% discount every payment</p>
+        <p class="text-slate-500 text-sm mt-1">Segera daftarkan dirimu dan dapatkan diskon 4% setiap transaksi.</p>
     </div>
 
     <div class="rounded-xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">

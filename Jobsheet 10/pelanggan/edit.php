@@ -53,6 +53,15 @@ if (!$pelanggan) {
                 <input type="tel" id="nohp" name="nohp" required value="<?= htmlspecialchars($pelanggan['no_hp']) ?>" class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-darkgreen focus:ring-1 focus:ring-darkgreen text-sm transition-all">
             </div>
 
+            <div>
+                <label for="gender" class="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-2">Gender</label>
+                <select id="gender" name="gender" required class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-darkgreen focus:ring-1 focus:ring-darkgreen text-sm transition-all">
+                    <?php foreach (['Perempuan', 'Laki-laki', 'Tidak disebutkan'] as $gender): ?>
+                        <option value="<?= $gender ?>" <?= ($pelanggan['gender'] ?? 'Tidak disebutkan') === $gender ? 'selected' : '' ?>><?= $gender ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
             <div class="pt-4 flex items-center justify-end space-x-3">
                 <a href="list.php" class="px-4 py-2.5 rounded-lg bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200 text-sm font-medium transition-colors">Batal</a>
                 <button type="submit" class="inline-flex items-center space-x-2 px-5 py-2.5 rounded-lg bg-darkgreen text-white font-semibold text-sm hover:bg-softgreen transition-colors shadow-sm">

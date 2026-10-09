@@ -20,6 +20,7 @@ $kode   = trim($_POST['kode'] ?? '');
 $nama   = trim($_POST['nama'] ?? '');
 $alamat = trim($_POST['alamat'] ?? '');
 $nohp   = trim($_POST['nohp'] ?? '');
+$gender = trim($_POST['gender'] ?? '');
 
 $errors = [];
 
@@ -38,6 +39,9 @@ if ($alamat === '') {
 if ($nohp === '' || !preg_match('/^[0-9+\-\s]{8,15}$/', $nohp)) {
     $errors[] = 'Nomor HP wajib diisi dengan format yang valid.';
 }
+if (!in_array($gender, ['Perempuan', 'Laki-laki', 'Tidak disebutkan'], true)) {
+    $errors[] = 'Gender tidak valid.';
+}
 
 if (!empty($errors)) {
     $_SESSION['flash'] = [
@@ -52,7 +56,8 @@ $sql = 'UPDATE pelanggan
         SET kode_pelanggan = :kode,
             nama           = :nama,
             alamat         = :alamat,
-            no_hp          = :nohp
+            no_hp          = :nohp,
+            gender         = :gender
         WHERE id = :id';
 
 $stmt = $pdo->prepare($sql);
@@ -61,6 +66,7 @@ $stmt->execute([
     ':nama'   => $nama,
     ':alamat' => $alamat,
     ':nohp'   => $nohp,
+    ':gender' => $gender,
     ':id'     => $id,
 ]);
 

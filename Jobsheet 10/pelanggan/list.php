@@ -1,139 +1,70 @@
 <?php
-require __DIR__ . '/../includes/auth.php';
-$pageTitle = 'Taslimiyah Bakery | Daftar Pelanggan';
+$pageTitle = 'Taslimiyah Bakery | Loyalty Member';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$isAdmin = !empty($_SESSION['user_id']) && in_array($_SESSION['role'] ?? '', ['admin', 'petugas'], true);
+$isGuest = ($_SESSION['mode'] ?? '') === 'guest';
 require __DIR__ . '/../includes/koneksi.php';
+$members = $pdo->query('SELECT * FROM pelanggan ORDER BY id DESC')->fetchAll();
+$testimonials = $pdo->query('SELECT isi FROM testimoni WHERE dipublikasikan = TRUE ORDER BY dibuat_pada DESC LIMIT 6')->fetchAll();
 include __DIR__ . '/../includes/header.php';
-
-// --- Pagination ---
-$perHalaman = 5;
-$halaman = max(1, (int) ($_GET['page'] ?? 1));
-$offset = ($halaman - 1) * $perHalaman;
-
-// --- Pencarian server-side ---
-$kataKunci = trim($_GET['q'] ?? '');
-
-$where = '';
-$params = [];
-if ($kataKunci !== '') {
-    $where = 'WHERE nama ILIKE :kw OR kode_pelanggan ILIKE :kw';
-    $params[':kw'] = '%' . $kataKunci . '%';
-}
-
-$totalBaris = (int) (function () use ($pdo, $where, $params) {
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM pelanggan {$where}");
-    $stmt->execute($params);
-    return $stmt->fetchColumn();
-})();
-$totalHalaman = max(1, (int) ceil($totalBaris / $perHalaman));
-
-$sql = "SELECT * FROM pelanggan {$where} ORDER BY id DESC LIMIT :limit OFFSET :offset";
-$stmt = $pdo->prepare($sql);
-foreach ($params as $key => $val) {
-    $stmt->bindValue($key, $val);
-}
-$stmt->bindValue(':limit', $perHalaman, PDO::PARAM_INT);
-$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-$stmt->execute();
-$daftarPelanggan = $stmt->fetchAll();
-
-function urlHalamanPelanggan(int $page, string $q): string
-{
-    $params = ['page' => $page];
-    if ($q !== '') {
-        $params['q'] = $q;
-    }
-    return '?' . http_build_query($params);
-}
 ?>
-<main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+<main class="mx-auto w-full max-w-7xl flex-grow px-4 py-10 sm:px-6 lg:px-8">
+    <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-            <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Daftar Pelanggan</h1>
-            <p class="text-slate-500 text-sm mt-1">Segera daftarkan dirimu. Be A Mamber and get 9% discount every payment</p>
+            <p class="text-xs font-bold uppercase tracking-[.2em] text-darkgreen">Loyalty Club</p>
+            <h1 class="mt-2 font-serif text-4xl font-bold text-stone-900"><?= $isAdmin ? 'Data Member' : 'Pelanggan & Member' ?></h1>
+            <p class="mt-2 max-w-2xl text-sm text-stone-500"><?= $isAdmin ? 'Kelola data pelanggan Taslimiyah Bakery.' : 'Daftar jadi member untuk mendapatkan potongan 4% setiap transaksi.' ?></p>
         </div>
-        <a href="tambah.php" class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-lg bg-darkgreen text-white font-semibold text-sm hover:bg-softgreen transition-colors w-fit shadow-sm">
-            <i data-lucide="user-plus" class="w-4 h-4"></i>
-            <span>Daftarkan diri</span>
-        </a>
+        <?php if (!$isAdmin): ?>
+            <a href="daftar.php" class="inline-flex items-center gap-2 self-start rounded-xl bg-darkgreen px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-softgreen"><i data-lucide="user-round-plus" class="h-4 w-4"></i>Daftarkan diri</a>
+        <?php endif; ?>
     </div>
 
-    <form method="get" action="list.php" class="mb-4 flex gap-2">
-        <input
-            type="text"
-            id="search-input"
-            name="q"
-            placeholder="Cari kode atau nama pelanggan..."
-            value="<?= $kataKunci ?>"
-            class="flex-grow px-4 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-darkgreen focus:ring-1 focus:ring-darkgreen text-sm transition-all"
-        >
-        <button type="submit" class="px-4 py-2.5 rounded-lg bg-darkgreen text-white font-semibold text-sm hover:bg-softgreen transition-colors shadow-sm">
-            Cari
-        </button>
-    </form>
-
-    <div class="rounded-xl border border-slate-200 bg-white overflow-hidden shadow-sm">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm text-slate-700">
-                <thead class="bg-slate-50 text-xs uppercase text-slate-500 border-b border-slate-200">
+    <?php if (!$isAdmin): ?>
+        <section class="mb-8 grid gap-4 md:grid-cols-3">
+            <article class="glass-card p-6"><i data-lucide="cake-slice" class="h-6 w-6 text-darkgreen"></i><h2 class="mt-4 font-serif text-xl font-bold">Rasa yang fresh</h2><p class="mt-2 text-sm text-stone-500">Pilihan kue dan roti dibuat untuk menemani momen spesialmu.</p></article>
+            <article class="glass-card p-6"><i data-lucide="badge-percent" class="h-6 w-6 text-amber-600"></i><h2 class="mt-4 font-serif text-xl font-bold">Diskon member 4%</h2><p class="mt-2 text-sm text-stone-500">Masukkan nomor khusus member saat proses pembayaran.</p></article>
+            <article class="glass-card p-6"><i data-lucide="heart-handshake" class="h-6 w-6 text-rose-500"></i><h2 class="mt-4 font-serif text-xl font-bold">Cerita dari member</h2><p class="mt-2 text-sm text-stone-500">Bagikan pengalamanmu saat bergabung. Testimoni hanya ditampilkan anonim setelah mendapat persetujuanmu.</p></article>
+        </section>
+        <section class="mb-8">
+            <h2 class="mb-4 font-serif text-2xl font-bold text-stone-900">Testimoni member</h2>
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <?php foreach ($testimonials as $testimonial): ?><blockquote class="glass-card p-5"><i data-lucide="quote" class="h-5 w-5 text-amber-600"></i><p class="mt-3 text-sm leading-6 text-stone-700">“<?= nl2br(htmlspecialchars($testimonial['isi'])) ?>”</p><footer class="mt-4 text-xs font-semibold text-darkgreen">Member Taslimiyah Bakery</footer></blockquote><?php endforeach; ?>
+                <?php if (!$testimonials): ?><p class="text-sm text-stone-500">Belum ada testimoni. Kamu dapat berbagi cerita saat mendaftar sebagai member.</p><?php endif; ?>
+            </div>
+        </section>
+        <section>
+            <h2 class="mb-4 font-serif text-2xl font-bold text-stone-900">Loyalty member</h2>
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <?php foreach (array_slice($members, 0, 6) as $member): ?>
+                    <article class="glass-card p-5">
+                        <div class="flex items-center gap-3"><div class="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-100 font-serif text-lg font-bold text-darkgreen"><i data-lucide="heart" class="h-5 w-5"></i></div><div><h3 class="font-semibold text-stone-900">Member Loyalty</h3><p class="text-xs text-stone-500">Taslimiyah Bakery</p></div></div>
+                        <p class="mt-4 text-sm text-stone-500">Terima kasih sudah menjadi bagian dari perjalanan manis kami.</p>
+                    </article>
+                <?php endforeach; ?>
+                <?php if (!$members): ?><p class="text-sm text-stone-500">Belum ada member. Jadilah yang pertama bergabung.</p><?php endif; ?>
+            </div>
+        </section>
+    <?php else: ?>
+        <div class="glass-panel overflow-x-auto rounded-2xl">
+            <table class="w-full min-w-[680px] text-left text-sm">
+                <thead class="border-b border-stone-200/70 text-xs uppercase tracking-wider text-stone-500"><tr><th class="px-5 py-4">Nomor khusus</th><th class="px-5 py-4">Nama</th><th class="px-5 py-4">Gender</th><th class="px-5 py-4">Alamat domisili</th><th class="px-5 py-4">No. HP</th><th class="px-5 py-4 text-right">Aksi</th></tr></thead>
+                <tbody class="divide-y divide-stone-200/60">
+                <?php foreach ($members as $member): ?>
                     <tr>
-                        <th scope="col" class="px-6 py-4 font-mono">Kode</th>
-                        <th scope="col" class="px-6 py-4">Nama Pelanggan</th>
-                        <th scope="col" class="px-6 py-4">Alamat</th>
-                        <th scope="col" class="px-6 py-4">No HP</th>
-                        <th scope="col" class="px-6 py-4 text-right">Aksi</th>
+                        <td class="px-5 py-4 font-mono font-bold text-darkgreen"><?= htmlspecialchars($member['kode_pelanggan']) ?></td>
+                        <td class="px-5 py-4 font-semibold"><?= htmlspecialchars($member['nama']) ?></td>
+                        <td class="px-5 py-4"><?= htmlspecialchars($member['gender'] ?? '—') ?></td>
+                        <td class="px-5 py-4"><?= htmlspecialchars($member['alamat']) ?></td>
+                        <td class="px-5 py-4"><?= htmlspecialchars($member['no_hp']) ?></td>
+                        <td class="px-5 py-4"><div class="flex justify-end gap-2"><a href="edit.php?id=<?= (int) $member['id'] ?>" class="rounded-lg p-2 text-darkgreen hover:bg-emerald-50" aria-label="Edit member"><i data-lucide="pencil" class="h-4 w-4"></i></a><form class="form-hapus" method="post" action="hapus.php" data-nama="<?= htmlspecialchars($member['nama'], ENT_QUOTES) ?>"><input type="hidden" name="id" value="<?= (int) $member['id'] ?>"><button class="rounded-lg p-2 text-red-600 hover:bg-red-50" aria-label="Hapus member"><i data-lucide="trash-2" class="h-4 w-4"></i></button></form></div></td>
                     </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100">
-                    <?php if (empty($daftarPelanggan)): ?>
-                        <tr>
-                            <td colspan="5" class="px-6 py-4 text-center text-slate-400">Belum ada data pelanggan.</td>
-                        </tr>
-                    <?php else: ?>
-                        <?php foreach ($daftarPelanggan as $c): ?>
-                            <tr class="hover:bg-slate-50/80 transition-colors">
-                                <td class="px-6 py-4 font-mono text-darkgreen font-bold"><?= htmlspecialchars($c['kode_pelanggan']) ?></td>
-                                <td class="px-6 py-4 font-semibold text-slate-900"><?= htmlspecialchars($c['nama']) ?></td>
-                                <td class="px-6 py-4 text-slate-600"><?= htmlspecialchars($c['alamat']) ?></td>
-                                <td class="px-6 py-4 font-mono text-slate-600"><?= htmlspecialchars($c['no_hp']) ?></td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center justify-end gap-2">
-                                        <a href="edit.php?id=<?= (int) $c['id'] ?>" class="p-2 rounded-lg text-slate-500 hover:text-darkgreen hover:bg-slate-100 transition-colors" title="Edit">
-                                            <i data-lucide="pencil" class="w-4 h-4"></i>
-                                        </a>
-                                        <form class="form-hapus" method="post" action="hapus.php" data-nama="<?= htmlspecialchars($c['nama']) ?>">
-                                            <input type="hidden" name="id" value="<?= (int) $c['id'] ?>">
-                                            <button type="submit" class="p-2 rounded-lg text-red-500 hover:text-white hover:bg-red-500 transition-colors" title="Hapus">
-                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                <?php endforeach; ?>
+                <?php if (!$members): ?><tr><td colspan="6" class="px-5 py-8 text-center text-stone-500">Belum ada member terdaftar.</td></tr><?php endif; ?>
                 </tbody>
             </table>
-        </div>
-    </div>
-
-    <?php if ($totalHalaman > 1): ?>
-        <div class="flex items-center justify-center gap-2 mt-6">
-            <a href="<?= urlHalamanPelanggan(max(1, $halaman - 1), $kataKunci) ?>"
-               class="px-3 py-2 rounded-lg text-sm font-medium border border-slate-200 <?= $halaman <= 1 ? 'pointer-events-none text-slate-300' : 'text-slate-600 hover:text-darkgreen hover:bg-slate-100' ?> transition-colors">
-                <i data-lucide="chevron-left" class="w-4 h-4"></i>
-            </a>
-
-            <?php for ($i = 1; $i <= $totalHalaman; $i++): ?>
-                <a href="<?= urlHalamanPelanggan($i, $kataKunci) ?>"
-                   class="w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium border transition-colors <?= $i === $halaman ? 'bg-darkgreen text-white border-darkgreen' : 'text-slate-600 border-slate-200 hover:bg-slate-100' ?>">
-                    <?= $i ?>
-                </a>
-            <?php endfor; ?>
-
-            <a href="<?= urlHalamanPelanggan(min($totalHalaman, $halaman + 1), $kataKunci) ?>"
-               class="px-3 py-2 rounded-lg text-sm font-medium border border-slate-200 <?= $halaman >= $totalHalaman ? 'pointer-events-none text-slate-300' : 'text-slate-600 hover:text-darkgreen hover:bg-slate-100' ?> transition-colors">
-                <i data-lucide="chevron-right" class="w-4 h-4"></i>
-            </a>
         </div>
     <?php endif; ?>
 </main>

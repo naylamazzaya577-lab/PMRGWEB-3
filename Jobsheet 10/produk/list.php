@@ -1,142 +1,86 @@
 <?php
-$pageTitle = 'Taslimiyah Bakery | Daftar Produk';
+if (session_status() === PHP_SESSION_NONE) session_start();
+$pageTitle = 'Taslimiyah Bakery | Pricelist';
 require __DIR__ . '/../includes/koneksi.php';
-include __DIR__ . '/../includes/header.php';
-
-// --- Pagination ---
-$perHalaman = 5;
-$halaman = max(1, (int) ($_GET['page'] ?? 1));
-$offset = ($halaman - 1) * $perHalaman;
-
-// --- Pencarian server-side ---
-$kataKunci = trim($_GET['q'] ?? '');
-
-$where = '';
+$isAdmin = !empty($_SESSION['user_id']) && in_array($_SESSION['role'] ?? '', ['admin', 'petugas'], true);
+$isGuest = ($_SESSION['mode'] ?? '') === 'guest';
+$query = trim($_GET['q'] ?? '');
+$sql = 'SELECT * FROM produk';
 $params = [];
-if ($kataKunci !== '') {
-    $where = 'WHERE nama_produk ILIKE :kw OR kode_produk ILIKE :kw';
-    $params[':kw'] = '%' . $kataKunci . '%';
+if ($query !== '') {
+    $sql .= ' WHERE nama_produk ILIKE :kw_name OR kode_produk ILIKE :kw_code OR kategori ILIKE :kw_category';
+    $keyword = '%' . $query . '%';
+    $params = [':kw_name' => $keyword, ':kw_code' => $keyword, ':kw_category' => $keyword];
 }
-
-$totalBaris = (int) (function () use ($pdo, $where, $params) {
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM produk {$where}");
-    $stmt->execute($params);
-    return $stmt->fetchColumn();
-})();
-$totalHalaman = max(1, (int) ceil($totalBaris / $perHalaman));
-
-$sql = "SELECT * FROM produk {$where} ORDER BY id DESC LIMIT :limit OFFSET :offset";
+$sql .= ' ORDER BY kategori, nama_produk';
 $stmt = $pdo->prepare($sql);
-foreach ($params as $key => $val) {
-    $stmt->bindValue($key, $val);
+$stmt->execute($params);
+$products = $stmt->fetchAll();
+$categories = [];
+foreach ($products as $product) {
+    $categories[$product['kategori']][] = $product;
 }
-$stmt->bindValue(':limit', $perHalaman, PDO::PARAM_INT);
-$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-$stmt->execute();
-$daftarProduk = $stmt->fetchAll();
-
-function urlHalaman(int $page, string $q): string
-{
-    $params = ['page' => $page];
-    if ($q !== '') {
-        $params['q'] = $q;
-    }
-    return '?' . http_build_query($params);
-}
+include __DIR__ . '/../includes/header.php';
 ?>
-<main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+<main class="mx-auto w-full max-w-7xl flex-grow px-4 py-10 sm:px-6 lg:px-8">
+    <div class="mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-            <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Daftar Produk</h1>
-            <p class="text-slate-500 text-sm mt-1">Kelola stok dan daftar produk Cake dan roti.</p>
+            <p class="text-xs font-bold uppercase tracking-[.2em] text-darkgreen">Fresh from our oven</p>
+            <h1 class="mt-2 font-serif text-4xl font-bold text-stone-900">Pricelist Produk</h1>
+            <p class="mt-2 text-sm text-stone-500">Pilih kategori kue kering, cake, dan roti all variant.</p>
         </div>
-        <a href="tambah.php" class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-lg bg-darkgreen text-white font-semibold text-sm hover:bg-softgreen transition-colors w-fit shadow-sm">
-            <i data-lucide="plus" class="w-4 h-4"></i>
-            <span>Tambah Produk</span>
-        </a>
+        <?php if ($isAdmin): ?>
+            <a href="tambah.php" class="inline-flex items-center gap-2 self-start rounded-xl bg-darkgreen px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-softgreen"><i data-lucide="plus" class="h-4 w-4"></i>Tambah produk</a>
+        <?php elseif ($isGuest): ?>
+            <a href="../checkout.php" class="inline-flex items-center gap-2 self-start rounded-xl bg-darkgreen px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-softgreen"><i data-lucide="shopping-bag" class="h-4 w-4"></i>Lihat keranjang <span class="cart-count">0</span></a>
+        <?php endif; ?>
     </div>
 
-    <!-- Form pencarian: GET ke list.php, sekaligus jadi target filter instan client-side (search-input) -->
-    <form method="get" action="list.php" class="mb-4 flex gap-2">
-        <input
-            type="text"
-            id="search-input"
-            name="q"
-            placeholder="Cari kode atau nama produk..."
-            value="<?= $kataKunci ?>"
-            class="flex-grow px-4 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-darkgreen focus:ring-1 focus:ring-darkgreen text-sm transition-all"
-        >
-        <button type="submit" class="px-4 py-2.5 rounded-lg bg-darkgreen text-white font-semibold text-sm hover:bg-softgreen transition-colors shadow-sm">
-            Cari
-        </button>
+    <form method="get" class="mb-6 flex gap-2">
+        <input type="search" name="q" value="<?= htmlspecialchars($query) ?>" placeholder="Cari nama produk atau kategori..." class="min-w-0 flex-1 rounded-xl border border-white bg-white/80 px-4 py-3 text-sm shadow-sm outline-none focus:border-darkgreen focus:ring-2 focus:ring-emerald-100">
+        <button class="rounded-xl bg-darkgreen px-5 py-3 text-sm font-semibold text-white hover:bg-softgreen">Cari</button>
     </form>
 
-    <div class="rounded-xl border border-slate-200 bg-white overflow-hidden shadow-sm">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm text-slate-700">
-                <thead class="bg-slate-50 text-xs uppercase text-slate-500 border-b border-slate-200">
-                    <tr>
-                        <th scope="col" class="px-6 py-4 font-mono">Kode</th>
-                        <th scope="col" class="px-6 py-4">Nama Produk</th>
-                        <th scope="col" class="px-6 py-4">Kategori</th>
-                        <th scope="col" class="px-6 py-4">Harga</th>
-                        <th scope="col" class="px-6 py-4">Stok</th>
-                        <th scope="col" class="px-6 py-4 text-right">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100">
-                    <?php if (empty($daftarProduk)): ?>
-                        <tr>
-                            <td colspan="6" class="px-6 py-4 text-center text-slate-400">Belum ada data produk.</td>
-                        </tr>
-                    <?php else: ?>
-                        <?php foreach ($daftarProduk as $p): ?>
-                            <tr class="hover:bg-slate-50/80 transition-colors">
-                                <td class="px-6 py-4 font-mono text-darkgreen font-bold"><?= htmlspecialchars($p['kode_produk']) ?></td>
-                                <td class="px-6 py-4 font-semibold text-slate-900"><?= htmlspecialchars($p['nama_produk']) ?></td>
-                                <td class="px-6 py-4 text-slate-600"><?= htmlspecialchars($p['kategori']) ?></td>
-                                <td class="px-6 py-4 font-mono text-slate-600">Rp <?= number_format((float) $p['harga'], 0, ',', '.') ?></td>
-                                <td class="px-6 py-4 text-slate-600"><?= (int) $p['stok'] ?></td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center justify-end gap-2">
-                                        <a href="edit.php?id=<?= (int) $p['id'] ?>" class="p-2 rounded-lg text-slate-500 hover:text-darkgreen hover:bg-slate-100 transition-colors" title="Edit">
-                                            <i data-lucide="pencil" class="w-4 h-4"></i>
-                                        </a>
-                                        <form class="form-hapus" method="post" action="hapus.php" data-nama="<?= htmlspecialchars($p['nama_produk']) ?>">
-                                            <input type="hidden" name="id" value="<?= (int) $p['id'] ?>">
-                                            <button type="submit" class="p-2 rounded-lg text-red-500 hover:text-white hover:bg-red-500 transition-colors" title="Hapus">
-                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <?php if ($totalHalaman > 1): ?>
-        <div class="flex items-center justify-center gap-2 mt-6">
-            <a href="<?= urlHalaman(max(1, $halaman - 1), $kataKunci) ?>"
-               class="px-3 py-2 rounded-lg text-sm font-medium border border-slate-200 <?= $halaman <= 1 ? 'pointer-events-none text-slate-300' : 'text-slate-600 hover:text-darkgreen hover:bg-slate-100' ?> transition-colors">
-                <i data-lucide="chevron-left" class="w-4 h-4"></i>
-            </a>
-
-            <?php for ($i = 1; $i <= $totalHalaman; $i++): ?>
-                <a href="<?= urlHalaman($i, $kataKunci) ?>"
-                   class="w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium border transition-colors <?= $i === $halaman ? 'bg-darkgreen text-white border-darkgreen' : 'text-slate-600 border-slate-200 hover:bg-slate-100' ?>">
-                    <?= $i ?>
-                </a>
-            <?php endfor; ?>
-
-            <a href="<?= urlHalaman(min($totalHalaman, $halaman + 1), $kataKunci) ?>"
-               class="px-3 py-2 rounded-lg text-sm font-medium border border-slate-200 <?= $halaman >= $totalHalaman ? 'pointer-events-none text-slate-300' : 'text-slate-600 hover:text-darkgreen hover:bg-slate-100' ?> transition-colors">
-                <i data-lucide="chevron-right" class="w-4 h-4"></i>
-            </a>
-        </div>
+    <?php if (!$products): ?>
+        <div class="glass-card p-10 text-center text-stone-500">Belum ada produk yang sesuai.</div>
     <?php endif; ?>
+    <?php foreach ($categories as $category => $items): ?>
+        <section class="mb-8">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-serif text-2xl font-bold text-stone-900"><?= htmlspecialchars($category) ?></h2>
+                <span class="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-darkgreen"><?= count($items) ?> produk</span>
+                <div class="h-px flex-1 bg-emerald-900/10"></div>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <?php foreach ($items as $product): ?>
+                    <article class="glass-card p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-mono text-stone-400"><?= htmlspecialchars($product['kode_produk']) ?></p>
+                                <h3 class="mt-2 text-lg font-semibold text-stone-900"><?= htmlspecialchars($product['nama_produk']) ?></h3>
+                            </div>
+                            <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-darkgreen"><?= (int) $product['stok'] > 0 ? 'Tersedia' : 'Habis' ?></span>
+                        </div>
+                        <div class="mt-5 flex items-end justify-between gap-3">
+                            <div><p class="text-xs text-stone-500">Harga</p><p class="mt-1 text-xl font-bold text-darkgreen">Rp <?= number_format((float) $product['harga'], 0, ',', '.') ?></p></div>
+                            <?php if ($isGuest && (int) $product['stok'] > 0): ?>
+                                <button type="button" data-add-to-cart data-id="<?= (int) $product['id'] ?>" data-name="<?= htmlspecialchars($product['nama_produk'], ENT_QUOTES) ?>" data-price="<?= (float) $product['harga'] ?>" data-stock="<?= (int) $product['stok'] ?>" class="rounded-xl bg-darkgreen px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-softgreen">Tambah</button>
+                            <?php elseif ($isAdmin): ?>
+                                <div class="flex gap-2">
+                                    <a href="edit.php?id=<?= (int) $product['id'] ?>" class="rounded-lg border border-emerald-900/10 p-2 text-darkgreen hover:bg-emerald-50" aria-label="Edit produk"><i data-lucide="pencil" class="h-4 w-4"></i></a>
+                                    <form class="form-hapus" method="post" action="hapus.php" data-nama="<?= htmlspecialchars($product['nama_produk'], ENT_QUOTES) ?>">
+                                        <input type="hidden" name="id" value="<?= (int) $product['id'] ?>">
+                                        <button class="rounded-lg border border-red-100 p-2 text-red-600 hover:bg-red-50" aria-label="Hapus produk"><i data-lucide="trash-2" class="h-4 w-4"></i></button>
+                                    </form>
+                                </div>
+                            <?php else: ?>
+                                <span class="text-xs text-stone-400">Login sebagai guest untuk memesan</span>
+                            <?php endif; ?>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        </section>
+    <?php endforeach; ?>
 </main>
 <?php include __DIR__ . '/../includes/footer.php'; ?>

@@ -4,7 +4,7 @@
 // file yang butuh akses database (list.php, proses_tambah.php, index.php,
 // proses_edit.php, hapus.php).
 
-$host = 'ep-billowing-tree-b4dw64eu-pooler.c-6.us-east-2.aws.neon.tech';
+$host = 'ep-billowing-tree-b4dw64eu.c-6.us-east-2.aws.neon.tech';
 $port = '5432';
 $db   = 'neondb';
 $user = 'neondb_owner';

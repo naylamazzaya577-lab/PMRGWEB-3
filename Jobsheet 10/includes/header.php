@@ -20,6 +20,8 @@ $depth = ($relative === '') ? 0 : (substr_count($relative, '/') + 1);
 $base = str_repeat('../', $depth);
 
 $pageTitle = $pageTitle ?? 'Taslimiyah Bakery';
+$isAdmin = !empty($_SESSION['user_id']) && in_array($_SESSION['role'] ?? '', ['admin', 'petugas'], true);
+$isGuest = ($_SESSION['mode'] ?? '') === 'guest';
 ?>
 
 <!DOCTYPE html>
@@ -38,9 +40,9 @@ $pageTitle = $pageTitle ?? 'Taslimiyah Bakery';
             theme: {
                 extend: {
                     colors: {
-                        darkgreen: '#103713',
-                        softgreen: '#1b5220',
-                        lightbg: '#F8FAFC',
+                        darkgreen: '#174d3b',
+                        softgreen: '#24644e',
+                        lightbg: '#faf8f4',
                     }
                 }
             }
@@ -55,22 +57,29 @@ $pageTitle = $pageTitle ?? 'Taslimiyah Bakery';
 
 <body class="bg-lightbg text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-darkgreen selection:text-white">
 
-<header class="border-b border-white/10 bg-darkgreen/95 backdrop-blur-md sticky top-0 z-50">
+<header class="border-b border-white/60 bg-white/85 backdrop-blur-xl sticky top-0 z-50 shadow-sm">
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
         <!-- Logo / Beranda -->
-        <a href="/index.php" class="flex items-center space-x-3 group">
+        <div class="flex min-w-0 items-center gap-2 sm:gap-3">
+        <a href="<?= $base ?>index.php" class="flex items-center space-x-2 sm:space-x-3 group">
 
-            <div class="w-8 h-8 rounded-full bg-white text-darkgreen flex items-center justify-center font-bold text-sm tracking-tighter shadow-sm">
+            <div class="w-8 h-8 rounded-full bg-darkgreen text-white flex items-center justify-center font-bold text-sm tracking-tighter shadow-sm">
                 T
             </div>
 
-            <span class="font-bold text-lg tracking-tight text-white group-hover:text-emerald-200 transition-colors">
+            <span class="whitespace-nowrap text-sm font-bold tracking-tight text-stone-800 transition-colors group-hover:text-darkgreen sm:text-lg">
                 Taslimiyah Bakery
             </span>
 
         </a>
+        <?php if ($isAdmin || $isGuest): ?>
+            <span class="whitespace-nowrap rounded-full border border-emerald-900/10 bg-emerald-50 px-2 py-1 text-[10px] font-semibold text-darkgreen sm:px-2.5 sm:text-xs">
+                <?= $isAdmin ? 'Admin' : 'Guest' ?>
+            </span>
+        <?php endif; ?>
+        </div>
 
 
         <!-- BAGIAN KANAN: menu + ikon dijadikan satu grup supaya rata kanan -->
@@ -79,50 +88,50 @@ $pageTitle = $pageTitle ?? 'Taslimiyah Bakery';
             <!-- MENU DESKTOP -->
             <nav class="hidden md:flex items-center space-x-1 text-sm font-medium mr-2">
 
-                <a href="/index.php"
-                   class="px-3 py-1.5 rounded-lg text-white/90 hover:text-white hover:bg-white/10 transition-colors">
+                <a href="<?= $base ?>index.php"
+                   class="px-3 py-1.5 rounded-full text-stone-600 hover:text-darkgreen hover:bg-emerald-50 transition-colors">
                     Beranda
                 </a>
 
-                <a href="/produk/list.php"
-                   class="px-3 py-1.5 rounded-lg text-white/90 hover:text-white hover:bg-white/10 transition-colors">
+                <a href="<?= $base ?>produk/list.php"
+                   class="px-3 py-1.5 rounded-full text-stone-600 hover:text-darkgreen hover:bg-emerald-50 transition-colors">
                     Produk
                 </a>
 
-                <a href="/pelanggan/list.php"
-                   class="px-3 py-1.5 rounded-lg text-white/90 hover:text-white hover:bg-white/10 transition-colors">
+                <a href="<?= $base ?>pelanggan/list.php"
+                   class="px-3 py-1.5 rounded-full text-stone-600 hover:text-darkgreen hover:bg-emerald-50 transition-colors">
                     Pelanggan
                 </a>
 
-                <?php if (!empty($_SESSION['user_id'])): ?>
-                    <span class="px-3 py-1.5 text-white/70 text-xs font-mono">
-                        Halo, <?= htmlspecialchars($_SESSION['nama']) ?>
-                    </span>
-                    <a href="/auth/logout.php"
-                       class="px-3 py-1.5 rounded-lg text-white/90 hover:text-white hover:bg-white/10 transition-colors">
-                        Logout
+                <a href="<?= $base ?>promo.php"
+                   class="px-3 py-1.5 rounded-full text-stone-600 hover:text-darkgreen hover:bg-emerald-50 transition-colors">
+                    Promo
+                </a>
+
+                <?php if ($isGuest): ?>
+                    <a href="<?= $base ?>checkout.php" aria-label="Buka keranjang" class="relative inline-flex h-9 w-9 items-center justify-center rounded-full text-lg text-darkgreen transition-colors hover:bg-emerald-50"><span aria-hidden="true">🛒</span><span class="cart-count absolute right-0 top-0">0</span></a>
+                <?php endif; ?>
+
+                <?php if ($isAdmin): ?>
+                    <a href="<?= $base ?>pesanan/list.php" class="px-3 py-1.5 rounded-full text-stone-600 hover:text-darkgreen hover:bg-emerald-50 transition-colors">Pesanan</a>
+                    <a href="<?= $base ?>auth/logout.php"
+                       class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-stone-600 hover:text-darkgreen hover:bg-emerald-50 transition-colors">
+                        <i data-lucide="log-out" class="h-4 w-4"></i>Keluar
+                    </a>
+                <?php elseif (!$isGuest): ?>
+                    <a href="<?= $base ?>auth/login.php"
+                       class="px-3 py-1.5 rounded-full text-stone-600 hover:text-darkgreen hover:bg-emerald-50 transition-colors">
+                        Masuk
                     </a>
                 <?php else: ?>
-                    <a href="/auth/login.php"
-                       class="px-3 py-1.5 rounded-lg text-white/90 hover:text-white hover:bg-white/10 transition-colors">
-                        Login
-                    </a>
+                    <a href="<?= $base ?>auth/logout.php" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-stone-600 hover:text-darkgreen hover:bg-emerald-50 transition-colors"><i data-lucide="log-out" class="h-4 w-4"></i>Keluar</a>
                 <?php endif; ?>
 
             </nav>
 
-            <a href="https://github.com"
-               target="_blank"
-               class="p-2 text-white/80 hover:text-white rounded-lg hover:bg-white/10 transition-colors">
-
-                <i data-lucide="github" class="w-5 h-5"></i>
-
-            </a>
-
-
             <!-- Tombol menu HP -->
             <button id="menu-btn"
-                    class="md:hidden p-2 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors focus:outline-none">
+                    class="md:hidden p-2 text-stone-700 hover:text-darkgreen hover:bg-emerald-50 rounded-lg transition-colors focus:outline-none">
 
                 <i data-lucide="menu" class="w-6 h-6"></i>
 
@@ -136,33 +145,37 @@ $pageTitle = $pageTitle ?? 'Taslimiyah Bakery';
     <!-- MENU MOBILE: dirapihin jadi bentang penuh dari kiri (left-4) ke kanan (right-4),
          bukan cuma kotak kecil ngambang di pojok kanan seperti sebelumnya -->
     <div id="mobile-menu"
-         class="hidden md:hidden absolute left-4 right-4 top-16 bg-white border border-slate-200 rounded-xl p-2 shadow-xl z-50 flex flex-col space-y-1">
+         class="hidden md:hidden absolute left-4 right-4 top-16 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-xl p-2 shadow-xl z-50 flex flex-col space-y-1">
 
-        <a href="/index.php"
+        <a href="<?= $base ?>index.php"
            class="block px-4 py-2.5 rounded-lg text-slate-700 hover:text-white hover:bg-darkgreen text-sm font-medium transition-colors">
             Beranda
         </a>
 
-        <a href="/produk/list.php"
+        <a href="<?= $base ?>produk/list.php"
            class="block px-4 py-2.5 rounded-lg text-slate-700 hover:text-white hover:bg-darkgreen text-sm font-medium transition-colors">
             Produk
         </a>
 
-        <a href="/pelanggan/list.php"
+        <a href="<?= $base ?>pelanggan/list.php"
            class="block px-4 py-2.5 rounded-lg text-slate-700 hover:text-white hover:bg-darkgreen text-sm font-medium transition-colors">
             Pelanggan
         </a>
 
-        <?php if (!empty($_SESSION['user_id'])): ?>
-            <span class="block px-4 py-2 text-xs font-mono text-slate-400">
-                Halo, <?= htmlspecialchars($_SESSION['nama']) ?>
-            </span>
-            <a href="/auth/logout.php"
-               class="block px-4 py-2.5 rounded-lg text-slate-700 hover:text-white hover:bg-darkgreen text-sm font-medium transition-colors">
-                Logout
+        <a href="<?= $base ?>promo.php"
+           class="block px-4 py-2.5 rounded-lg text-slate-700 hover:text-white hover:bg-darkgreen text-sm font-medium transition-colors">Promo</a>
+
+        <?php if ($isGuest): ?>
+            <a href="<?= $base ?>checkout.php" aria-label="Buka keranjang" class="relative flex h-10 w-10 items-center justify-center rounded-lg text-slate-700 hover:text-white hover:bg-darkgreen transition-colors"><span aria-hidden="true">🛒</span><span class="cart-count absolute right-1 top-1">0</span></a>
+            <a href="<?= $base ?>auth/logout.php" class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-slate-700 hover:text-white hover:bg-darkgreen text-sm font-medium transition-colors"><i data-lucide="log-out" class="h-4 w-4"></i>Keluar dari mode tamu</a>
+        <?php elseif ($isAdmin): ?>
+            <a href="<?= $base ?>pesanan/list.php" class="block px-4 py-2.5 rounded-lg text-slate-700 hover:text-white hover:bg-darkgreen text-sm font-medium transition-colors">Pesanan</a>
+            <a href="<?= $base ?>auth/logout.php"
+               class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-slate-700 hover:text-white hover:bg-darkgreen text-sm font-medium transition-colors">
+                <i data-lucide="log-out" class="h-4 w-4"></i>Keluar
             </a>
         <?php else: ?>
-            <a href="/auth/login.php"
+            <a href="<?= $base ?>auth/login.php"
                class="block px-4 py-2.5 rounded-lg text-slate-700 hover:text-white hover:bg-darkgreen text-sm font-medium transition-colors">
                 Login
             </a>

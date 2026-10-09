@@ -1,7 +1,7 @@
 <?php
 // auth/proses_login.php
-// Cari user by username, cocokkan password dengan password_verify()
-// (jangan pernah bandingkan password mentah dengan == atau ===).
+// Akun database diverifikasi dengan password_verify(); kredensial environment
+// menggunakan hash_equals() agar kode akses tidak ditanam di source.
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -14,23 +14,46 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$username = trim($_POST['username'] ?? '');
-$password = $_POST['password'] ?? '';
+$nama = trim($_POST['nama'] ?? '');
+$password = $_POST['kode_admin'] ?? '';
 
-$stmt = $pdo->prepare('SELECT * FROM users WHERE username = :username');
-$stmt->execute([':username' => $username]);
-$user = $stmt->fetch();
+$configuredName = getenv('BAKERY_ADMIN_NAME');
+$configuredCode = getenv('BAKERY_ADMIN_CODE');
+$configuredName = is_string($configuredName) && $configuredName !== '' ? $configuredName : 'Zaya';
+$user = null;
 
-if (!$user || !password_verify($password, $user['password'])) {
+if (is_string($configuredCode) && $configuredCode !== '' &&
+    strcasecmp($nama, $configuredName) === 0 &&
+    hash_equals($configuredCode, (string) $password)) {
+    $user = [
+        'id' => 'configured-admin',
+        'nama' => $configuredName,
+        'username' => strtolower($configuredName),
+        'role' => 'admin',
+    ];
+} else {
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE LOWER(nama) = LOWER(:nama) AND role IN ('admin', 'petugas') ORDER BY id");
+    $stmt->execute([':nama' => $nama]);
+    foreach ($stmt->fetchAll() as $candidate) {
+        if (password_verify($password, $candidate['password'])) {
+            $user = $candidate;
+            break;
+        }
+    }
+}
+
+if (!$user) {
     $_SESSION['flash'] = [
         'type'  => 'error',
-        'pesan' => 'Username atau password salah.',
+        'pesan' => 'Nama admin atau kode admin salah.',
     ];
     header('Location: login.php');
     exit;
 }
 
 // Login berhasil — simpan info user di session
+session_regenerate_id(true);
+unset($_SESSION['mode']);
 $_SESSION['user_id']  = $user['id'];
 $_SESSION['nama']     = $user['nama'];
 $_SESSION['username'] = $user['username'];

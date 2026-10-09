@@ -38,3 +38,50 @@ function initFilterTabel() {
         });
     });
 }
+
+function getCart() {
+    try {
+        const cart = JSON.parse(localStorage.getItem('taslimiyah-cart') || '[]');
+        return Array.isArray(cart) ? cart : [];
+    } catch (error) {
+        console.error('Keranjang tidak dapat dibaca.', error);
+        return [];
+    }
+}
+
+function saveCart(cart) {
+    localStorage.setItem('taslimiyah-cart', JSON.stringify(cart));
+    const count = cart.reduce((total, item) => total + Number(item.quantity || 0), 0);
+    document.querySelectorAll('.cart-count').forEach((node) => {
+        node.textContent = String(count);
+    });
+}
+
+function initCart() {
+    saveCart(getCart());
+    document.querySelectorAll('[data-add-to-cart]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const cart = getCart();
+            const id = Number(button.dataset.id);
+            const existing = cart.find((item) => Number(item.id) === id);
+            const stock = Number(button.dataset.stock || 0);
+            const maxQuantity = Math.min(50, stock);
+            if (existing && Number(existing.quantity) >= maxQuantity) {
+                window.alert('Jumlah pilihan sudah mencapai stok produk.');
+                return;
+            }
+            if (existing) existing.quantity = Number(existing.quantity || 0) + 1;
+            else cart.push({
+                id,
+                name: button.dataset.name,
+                price: Number(button.dataset.price),
+                quantity: 1
+            });
+            saveCart(cart);
+            button.textContent = 'Ditambahkan';
+            window.setTimeout(() => { button.textContent = 'Tambah'; }, 1000);
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initCart);
