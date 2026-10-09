@@ -1,0 +1,7 @@
+# Jobsheet 10 online store setup
+
+1. Run `sql/03_order_loyalty_promo.sql` once against the existing PostgreSQL database. This creates the `promo` table used by the root-level `promo.php` page; no separate `promo/` folder is required.
+2. Set `BAKERY_ADMIN_NAME` and `BAKERY_ADMIN_CODE` in the PHP server environment to enable the configured admin login. The default name is `Zaya`; keep the access code out of source files. Existing database-backed admin accounts continue to work when configured credentials are not set. Public self-registration cannot create admin access.
+3. Guest checkout stores orders and reduces stock only after the server re-reads products and verifies inventory. Admins can review incoming orders and mark payments as received. Checkout code `140706` receives a 4% discount; an empty code or `-` means no discount.
+4. Delivery uses the route distance entered by the customer from the stated shop address. Delivery up to 7.5 km is free; every started kilometer beyond that is Rp 5,000. QRIS, bank transfer, and cash are available for both pickup and delivery. Online payments are stored as awaiting manual confirmation because merchant QRIS/bank account details and a payment gateway are not configured.
+5. Member registration shows the generated code and provides a WhatsApp click-to-chat message. Sending a WhatsApp message automatically requires a configured WhatsApp Business integration.
